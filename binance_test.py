@@ -1,14 +1,9 @@
 import websocket, json, pprint, talib, numpy
 from binance.client import Client
 from binance.enums import *
-import BKeys, utils
+from utils import *
+import BKeys
 import math
-
-SOCKET = "wss://stream.binance.com:9443/ws/ethusdt@kline_1m"
-usdt_wallet = 50
-precision_BTC = 6
-precision_x = 5
-precision_y = 5
 
 print('---------------------Process Initiated--------------------')
 
@@ -43,15 +38,7 @@ for k in client.get_exchange_info()['symbols']:
 def is_suffix(s,symbol):
     return True if symbol[-len(s):]==s else False
 
-def order(side, quantity, symbol,order_type=ORDER_TYPE_MARKET):
-    try:
-        # print("sending order")
-        order = client.create_order(symbol=symbol, side=side, type=order_type, quantity=quantity)
-    except Exception as e:
-        print("an exception occured - {}".format(e))
-        print('error : ',quantity)
-        return False
-    return True
+
 
 def handle_steps(side='BUY',bidask_price=1,min_trade_qty=0.000001,step=0,
                  target_asset='BTC',base_asset='USDT',pair='BTCUSDT'):
