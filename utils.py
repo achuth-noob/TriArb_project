@@ -4,6 +4,7 @@ from binance.enums import *
 import numpy as np
 import math
 import BKeys
+import datetime
 import time
 
 client = Client(BKeys.API_KEY, BKeys.API_SECRET)
@@ -20,7 +21,11 @@ def method_performance(method,*args):
     method(*args)
     t2 = time.perf_counter()-t1
     print(f'Elapsed Time to execute the function is {t2*1000}ms')
+    
+def convert_unixtime_datetime(t):
+    return time.strftime("%D %H:%M", time.localtime(t))
 
+print(convert_unixtime_datetime(1621756800.004))
 
 # print(floor_rounding(0.000156,0.0001,max_rounding=6))
 

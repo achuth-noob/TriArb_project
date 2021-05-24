@@ -1,13 +1,15 @@
 import websocket, json, pprint, talib, numpy
 from binance.client import Client
 from binance.enums import *
-from utils import *
+import utils
+from Exchange_uitls import *
+from Trade_utils import *
 import BKeys
 import math
 
 print('---------------------Process Initiated--------------------')
 
-client = Client(BKeys.API_KEY, BKeys.API_SECRET)
+# client = Client(BKeys.API_KEY, BKeys.API_SECRET)
 symbols = []
 usdt_symbols = []
 snap = client.get_orderbook_tickers()
@@ -51,7 +53,7 @@ def handle_steps(side='BUY',bidask_price=1,min_trade_qty=0.000001,step=0,
             tgt_qty = int(math.floor(float(base_qty/bidask_price)*0.95))
             print('Symbol Ask = ', bidask_price)
         else:
-            x = float(base_qty/bidask_price)*0.95
+            x = float(base_qty/bidask_price)*0.97
             y = min_trade_qty
             tgt_qty = utils.floor_rounding(x,y,max_rounding=8)
             print('Symbol Ask = ', bidask_price)
@@ -99,7 +101,7 @@ try:
                         # print(usdt_symbols[i], '->', symbols[j], '->', p + 'USDT')
                         # print('q1 = ',q1,'q2 = ',q2,'q3 = ',q3)
 
-                        if profit>0.1:
+                        if profit>0.5:
 
                             # Step 1
                             handle_steps(side='BUY', bidask_price=first_usdt_ask,min_trade_qty=0.000001,step=1,
