@@ -23,11 +23,10 @@ def force_market_order(side, tgt_qty, pair):
         print('-------------------Order Placed Successfully------------------')
         return
     except Exception as e:
-        # print('Exception hit')
+        print('Exception hit')
         mtgt_qty = tgt_qty - min_trade_qty[pair]
-        print(min_trade_qty[pair])
+        print('Min Trade Qty: ',min_trade_qty[pair])
         if mtgt_qty<0:
-            print()
             return
         print(mtgt_qty)
         force_market_order(side,mtgt_qty,pair)
@@ -57,5 +56,7 @@ def ALT_flushconvert_USDT(side='SELL'):
             except:
                 continue
 
-force_market_order('SELL',0.00810000,'BNTUSDT')
-pprint.pprint(client.get_asset_balance('BNT'))
+# ALT_flushconvert_USDT()
+# pprint.pprint(client.get_account()['balances'])
+# force_market_order('SELL',0.00810000,'BNTUSDT')
+# pprint.pprint(client.get_asset_balance('BNT'))

@@ -2,7 +2,7 @@ import websocket, json, pprint, talib, numpy
 from binance.client import Client
 from binance.enums import *
 import utils
-from Exchange_uitls import *
+from Exchange_utils import *
 from Trade_utils import *
 import BKeys
 import math
@@ -35,12 +35,8 @@ for k in client.get_exchange_info()['symbols']:
         if i['filterType']=='LOT_SIZE':
             min_trade_qty[k['symbol']] = float(i['minQty'])
 
-# print(min_trade_qty)
-
 def is_suffix(s,symbol):
     return True if symbol[-len(s):]==s else False
-
-
 
 def handle_steps(side='BUY',bidask_price=1,min_trade_qty=0.000001,step=0,
                  target_asset='BTC',base_asset='USDT',pair='BTCUSDT'):
@@ -50,16 +46,14 @@ def handle_steps(side='BUY',bidask_price=1,min_trade_qty=0.000001,step=0,
     if side == "BUY":
         # bidask_price = lowest ask price
         if min_trade_qty == 1:
-            tgt_qty = int(math.floor(float(base_qty/bidask_price)*0.95))
+            tgt_qty = int(math.floor(float(base_qty/bidask_price)*0.99))
             print('Symbol Ask = ', bidask_price)
         else:
-            x = float(base_qty/bidask_price)*0.97
+            x = float(base_qty/bidask_price)*0.99
             y = min_trade_qty
             tgt_qty = utils.floor_rounding(x,y,max_rounding=8)
             print('Symbol Ask = ', bidask_price)
     else:
-        # Sell testcase
-        # bidask_price = bid_price
         if min_trade_qty == 1:
             tgt_qty = base_qty - base_qty%1
             print('Symbol Ask = ', bidask_price)
@@ -101,7 +95,7 @@ try:
                         # print(usdt_symbols[i], '->', symbols[j], '->', p + 'USDT')
                         # print('q1 = ',q1,'q2 = ',q2,'q3 = ',q3)
 
-                        if profit>0.5:
+                        if profit>1:
 
                             # Step 1
                             handle_steps(side='BUY', bidask_price=first_usdt_ask,min_trade_qty=0.000001,step=1,
@@ -117,9 +111,6 @@ try:
                             handle_steps(side='SELL',min_trade_qty=min_trade_qty[p+'USDT'],
                                          step=3,target_asset='USDT',
                                          base_asset=p,pair=p+'USDT')
-
-
-
 
                             print(usdt_symbols[i],'->',symbols[j],'->',p+'USDT','profit =',profit)
                             tmp1 = float(client.get_asset_balance('USDT')['free'])
